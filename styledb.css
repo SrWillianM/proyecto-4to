@@ -1,0 +1,182 @@
+/* Estilo del Dashboard */
+body {
+    background-color: #f0f2f5;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+h3 {
+    color: #4A90E2;
+    margin-bottom: 20px;
+}
+
+.section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.section:hover {
+    transform: translateY(-5px);
+}
+
+.btn-primary, .btn-success {
+    background-color: #4A90E2;
+    border-color: #4A90E2;
+    color: #fff;
+}
+
+.btn-primary:hover, .btn-success:hover {
+    background-color: #357ABD;
+}
+
+input[type="text"], input[type="date"], select, textarea {
+    transition: border 0.3s;
+}
+
+input[type="text"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+    border-color: #4A90E2;
+}
+
+.table {
+    margin-top: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-bordered th, .table-bordered td {
+    border: 1px solid #dee2e6;
+}
+
+/* Carrusel de Imágenes */
+.carousel {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+
+.carousel img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.section {
+    opacity: 1;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.section.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* Cambiar la fuente del menú */
+.nav-link {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500; /* Puedes ajustar el grosor de la fuente aquí */
+    color: #333; /* Color del texto */
+}
+
+/* Cambiar la fuente de los títulos */
+h5 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+/* Personalización del menú */
+.nav-link:hover {
+    background-color: #007bff; /* Color de fondo al pasar el ratón */
+    color: white;
+}
+
+.container-fluid {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+/* Menú de la izquierda */
+.bg-light {
+    height: 100%;
+    background-color: #f8f9fa; /* Fondo gris claro */
+}
+
+/* Sección del contenido */
+.col-md-9 {
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto; /* Para que el contenido se desplace si es largo */
+}
+
+/* Añadir sombras y bordes al menú */
+.nav-link {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+/* Estilo para el botón del menú */
+.navbar-brand {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #007bff;
+    font-size: 24px;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+/* Hacer que el menú se vea más estilizado */
+.navbar {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+/* Contenedor principal con Flexbox */
+.container-fluid {
+    display: flex;
+    height: 100vh;
+    flex-direction: row;
+}
+
+/* Menú fijo y contenido flexible */
+.bg-light {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Hacer que el menú ocupe toda la altura */
+    position: sticky;
+    top: 0;
+}
+
+/* Contenido del dashboard */
+.col-md-9 {
+    flex-grow: 1;
+    padding: 20px;
+    height: 100%; /* Para que ocupe todo el espacio restante */
+    overflow-y: auto; /* Desplazamiento en caso de que haya demasiado contenido */
+}
+
+.nav-link {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: #007bff;
+    color: white;
+}
