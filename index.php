@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Santo Tomás Escuela de Conducción</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
@@ -17,7 +17,7 @@
                 echo '<div class="alert alert-danger text-center">Usuario o contraseña incorrectos.</div>';
             }
             ?>
-            <form action="scripts/login.php" method="POST">
+            <form action="login.php" method="POST">
                 <div class="form-group">
                     <label for="username">Usuario</label>
                     <input type="text" name="username" class="form-control" required>
@@ -31,7 +31,7 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="scripts/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

@@ -14,9 +14,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("ssssss", $nombre, $apellido, $nacionalidad, $domicilio, $telefono, $ci);
 
     if ($stmt->execute()) {
-        header("Location: ../dashboard.php?status=success&message=Cliente actualizado");
+        header("Location: dashboard.php?status=success&message=Cliente actualizado");
     } else {
-        header("Location: ../dashboard.php?status=error&message=Error al actualizar cliente");
+        header("Location: dashboard.php?status=error&message=Error al actualizar cliente");
     }
+
+    $stmt->close();
+    exit();
 }
+
+header("Location: dashboard.php?status=error&message=Solicitud no válida");
+exit();
 ?>

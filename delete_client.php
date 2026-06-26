@@ -9,9 +9,15 @@ if (isset($_GET['ci'])) {
     $stmt->bind_param("s", $ci);
 
     if ($stmt->execute()) {
-        header("Location: ../dashboard.php?status=success&message=Cliente eliminado");
+        header("Location: dashboard.php?status=success&message=Cliente eliminado");
     } else {
-        header("Location: ../dashboard.php?status=error&message=Error al eliminar cliente");
+        header("Location: dashboard.php?status=error&message=Error al eliminar cliente");
     }
+
+    $stmt->close();
+    exit();
 }
+
+header("Location: dashboard.php?status=error&message=Solicitud no válida");
+exit();
 ?>

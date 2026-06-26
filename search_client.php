@@ -48,4 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "<p>No se encontraron resultados para la cédula: " . htmlspecialchars($search_ci) . "</p>";
     }
 }
+
+$conn->close();
 ?>

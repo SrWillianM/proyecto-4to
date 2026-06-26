@@ -27,8 +27,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     } else {
         // Si las credenciales no coinciden, regresar al login con un error
-        header("Location: ../index.php?error=1");
+        header("Location: index.php?error=1");
         exit();
     }
+} else {
+    header("Location: index.php");
+    exit();
 }
 ?>

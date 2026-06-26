@@ -14,8 +14,7 @@ if (!isset($_SESSION['username'])) {
     <title>Dashboard - Santo Tomás Escuela de Conducción</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles/styledb.css">
-    <script src="scripts/dashboard.js"></script>
+    <link rel="stylesheet" href="styledb.css">
     <style>
         /* Agregar clases para ocultar/mostrar las secciones */
         .section {
@@ -36,7 +35,7 @@ if (!isset($_SESSION['username'])) {
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="scripts/logout.php">Cerrar Sesión</a>
+                        <a class="nav-link" href="logout.php">Cerrar Sesión</a>
                     </li>
                 </ul>
             </div>
@@ -70,17 +69,22 @@ if (!isset($_SESSION['username'])) {
             </div>
             <!-- Contenido Principal -->
             <div class="col-md-9 p-4">
+                <?php if (isset($_GET['status']) && isset($_GET['message'])) : ?>
+                    <div class="alert alert-<?php echo $_GET['status'] === 'success' ? 'success' : 'danger'; ?>">
+                        <?php echo htmlspecialchars($_GET['message']); ?>
+                    </div>
+                <?php endif; ?>
                 <!-- Sección Clientes -->
                 <div id="cliente" class="section active">
                     <h3>Clientes</h3>
-                    <form id="searchClientForm" class="form-inline mb-3" onsubmit="event.preventDefault(); /* Lógica de búsqueda aquí */">
-                        <input type="text" id="search_ci_cliente" class="form-control mr-2" placeholder="Buscar por CI" required>
+                    <form id="searchClientForm" class="form-inline mb-3" action="search_client.php" method="POST" onsubmit="return submitSearch(this, 'searchResults');">
+                        <input type="text" name="search_ci" id="search_ci_cliente" class="form-control mr-2" placeholder="Buscar por CI" required>
                         <button type="submit" class="btn btn-primary">Buscar</button>
                     </form>
                     <div id="searchResults"></div>
                     <button class="btn btn-success mb-3" onclick="toggleClientForm()">Nuevo Cliente</button>
                     <div id="newClientForm" style="display:none;">
-                        <form action="scripts/register_client.php" method="POST">
+                        <form action="register_client.php" method="POST">
                             <div class="form-group">
                                 <label for="ci">Cédula de Identidad</label>
                                 <input type="text" name="ci" class="form-control" required>
@@ -112,10 +116,10 @@ if (!isset($_SESSION['username'])) {
                 <!-- Sección de Cursos -->
                 <div id="curso" class="section">
                     <h3>Curso</h3>
-                    <form action="scripts/register_course.php" method="POST">
+                    <form action="register_course.php" method="POST">
                         <div class="form-group">
-                            <label for="id_cliente">ID Cliente</label>
-                            <input type="text" name="id_cliente" class="form-control" required>
+                            <label for="cedula_cliente">Cédula del Cliente</label>
+                            <input type="text" name="cedula_cliente" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="categoria">Categoría del Curso</label>
@@ -139,14 +143,14 @@ if (!isset($_SESSION['username'])) {
                 <!-- Sección de Agenda -->
                 <div id="agenda" class="section">
                     <h3>Agenda</h3>
-                    <form id="searchAgendaForm" class="form-inline mb-3" onsubmit="event.preventDefault(); /* Lógica de búsqueda aquí */">
-                        <input type="text" id="search_ci_agenda" class="form-control mr-2" placeholder="Buscar por CI" required>
+                    <form id="searchAgendaForm" class="form-inline mb-3" action="search_client.php" method="POST" onsubmit="return submitSearch(this, 'searchResultsAgenda');">
+                        <input type="text" name="search_ci" id="search_ci_agenda" class="form-control mr-2" placeholder="Buscar por CI" required>
                         <button type="submit" class="btn btn-primary">Buscar</button>
                     </form>
                     <div id="searchResultsAgenda"></div>
                     <button class="btn btn-success mb-3" onclick="toggleAgendaForm()">Nueva Agenda</button>
                     <div id="newAgendaForm" style="display:none;">
-                        <form action="scripts/agenda.php" method="POST">
+                        <form action="agenda.php" method="POST">
                             <div class="form-group">
                                 <label for="ci_cliente">Cédula de Identidad del Cliente</label>
                                 <input type="text" name="ci_cliente" class="form-control" required>
@@ -174,7 +178,7 @@ if (!isset($_SESSION['username'])) {
                 <!-- Sección de Asistencia -->
                 <div id="asistencia" class="section">
                     <h3>Asistencia</h3>
-                    <form action="scripts/register_attendance.php" method="POST">
+                    <form action="register_attendance.php" method="POST">
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -222,6 +226,24 @@ if (!isset($_SESSION['username'])) {
             sections.forEach(section => section.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
         }
+
+        async function submitSearch(form, resultId) {
+            const resultContainer = document.getElementById(resultId);
+            resultContainer.innerHTML = '<div class="alert alert-info mb-0">Buscando...</div>';
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: new FormData(form)
+                });
+
+                resultContainer.innerHTML = await response.text();
+            } catch (error) {
+                resultContainer.innerHTML = '<div class="alert alert-danger mb-0">No se pudo completar la búsqueda.</div>';
+            }
+
+            return false;
+        }
         // Función para mostrar el formulario de nuevo cliente
         function toggleClientForm() {
             const form = document.getElementById('newClientForm');
@@ -233,6 +255,8 @@ if (!isset($_SESSION['username'])) {
             form.style.display = form.style.display === 'none' ? 'block' : 'none';
         }
     </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
   

@@ -1,30 +1,57 @@
 <?php
+session_start();
 include("connection.php");
 
-// Simulación de datos, normalmente esto vendría de la base de datos
-$cliente = [
-    'nombre' => 'Juan Pérez',
-    'categoria' => 'B',
-    'fecha_inicio' => '2024-11-10',
-    'fecha_fin' => '2024-11-20'
-];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $ci_cliente = $_POST['ci_cliente'] ?? '';
+    $categoria = $_POST['categoria'] ?? '';
+    $fecha_inicio = $_POST['fecha_inicio'] ?? '';
+    $fecha_fin = $_POST['fecha_fin'] ?? '';
 
-// Función para generar fechas entre inicio y fin
-function generarFechas($inicio, $fin) {
-    $fechas = [];
-    $fecha_inicio = new DateTime($inicio);
-    $fecha_fin = new DateTime($fin);
-    $fecha_fin->modify('+1 day'); // Incluir el día final
+    if ($ci_cliente !== '' && $categoria !== '' && $fecha_inicio !== '' && $fecha_fin !== '') {
+        $sql_cliente = "SELECT id_cliente FROM cliente WHERE ci = ?";
+        $stmt = $conn->prepare($sql_cliente);
 
-    $intervalo = new DateInterval('P1D'); // Intervalo de 1 día
+        if ($stmt) {
+            $stmt->bind_param('s', $ci_cliente);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-    $periodo = new DatePeriod($fecha_inicio, $intervalo, $fecha_fin);
-    foreach ($periodo as $fecha) {
-        $fechas[] = $fecha->format('Y-m-d');
+            if ($result && $result->num_rows > 0) {
+                $cliente = $result->fetch_assoc();
+                $id_cliente = $cliente['id_cliente'];
+
+                $sql_agenda = "INSERT INTO agenda (id_cliente, categoria, fecha_inicio, fecha_fin) VALUES (?, ?, ?, ?)";
+                $stmt_agenda = $conn->prepare($sql_agenda);
+
+                if ($stmt_agenda) {
+                    $stmt_agenda->bind_param('isss', $id_cliente, $categoria, $fecha_inicio, $fecha_fin);
+
+                    if ($stmt_agenda->execute()) {
+                        header('Location: dashboard.php?status=success&message=Agenda registrada');
+                        exit();
+                    }
+
+                    $stmt_agenda->close();
+                }
+
+                $_SESSION['error_message'] = 'No se pudo registrar la agenda.';
+            } else {
+                $_SESSION['error_message'] = 'Cliente no encontrado. Verifica la cédula.';
+            }
+
+            $stmt->close();
+        } else {
+            $_SESSION['error_message'] = 'No se pudo preparar la búsqueda del cliente.';
+        }
+
+        header('Location: dashboard.php?status=error&message=' . urlencode($_SESSION['error_message'] ?? 'No se pudo registrar la agenda'));
+        exit();
     }
 
-    return $fechas;
+    header('Location: dashboard.php?status=error&message=Todos los campos son obligatorios');
+    exit();
 }
 
-$fechas_curso = generarFechas($cliente['fecha_inicio'], $cliente['fecha_fin']);
-?>
+header('Location: dashboard.php');
+exit();
